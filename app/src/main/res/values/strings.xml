@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Boomtownapp</string>
+    <string name="hello_world">Start your search here with Boomtown!</string>
+    <string name="action_settings">Settings</string>
+    <string name="address">Insert Address</string>
+    <string name="buttontext">ok</string>
+</resources>
