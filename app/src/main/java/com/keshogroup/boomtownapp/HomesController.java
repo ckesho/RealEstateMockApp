@@ -9,7 +9,6 @@ Contact Email: keshoLLC-info@yahoo.com
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +28,7 @@ public class HomesController extends ActionBarActivity {
     FragmentManager fragmentmanager;
     FragmentTransaction fragmenttransaction;
     HomesFragmentList fragment1= new HomesFragmentList();
-    HomesFragmentDetailedView fragment2= new HomesFragmentDetailedView();
+    //HomesFragmentDetailedView fragment2= new HomesFragmentDetailedView();//moved to new sub B activity
     EditText meditaddress;
     HomesModel homesmodel= new HomesModel();
     int indexaddress;
@@ -40,7 +39,7 @@ public class HomesController extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.homes_view);
+        setContentView(R.layout.view_homes);
         indexaddress=0;
         valueaddress="no current data";
         mbutton1=(Button)findViewById(R.id.button1);
@@ -109,20 +108,26 @@ public class HomesController extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 fragment1.updatelist(position, "On click still works!!");
 
-                fragmentmanager = getFragmentManager();
-                fragmenttransaction = fragmentmanager.beginTransaction();
-                fragmenttransaction.add(R.id.frameholder2,fragment1);
-                fragmenttransaction.commit();
-
-
+                //moved into seperate sub B activity
                 /*
-                Uri uri = Uri.parse("http://square.github.io/retrofit/static/icon-github.png");
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-
-                startActivity(intent);
+                fragmenttransaction = fragmentmanager.beginTransaction();
+                fragmenttransaction.replace(R.id.frameholder1, fragment2);
+                fragmenttransaction.addToBackStack("fragment2");
+                fragmenttransaction.setBreadCrumbShortTitle("fragment2");
+                fragmenttransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                fragmenttransaction.commit();
                 */
+
+
+                //Uri uri = Uri.parse("http://square.github.io/retrofit/static/icon-github.png");
+                Intent intent = new Intent();
+                intent.putExtra("open","http://thekeshogroup.files.wordpress.com/2015/07/keshogroup-logo1w_kg.jpg");
+                intent.setClass(getBaseContext(),HomesControllerSubB.class);
+                startActivity(intent);
+
             }
         });
+
     }
 
     @Override

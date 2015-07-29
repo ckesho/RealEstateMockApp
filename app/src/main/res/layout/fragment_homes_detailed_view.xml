@@ -14,12 +14,12 @@
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="@string/fragmenthomedetailedview_title"
             android:id="@+id/textview_fhdv"/>
-       <!--<WebView
+       <WebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/webview_fhdv"
             android:layout_below="@id/textview_fhdv"></WebView>
-        -->
+
     </RelativeLayout>
 
 </FrameLayout>
