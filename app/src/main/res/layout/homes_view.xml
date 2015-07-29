@@ -20,7 +20,13 @@
     <FrameLayout
         android:id="@+id/frameholder1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_below="@id/button1"
+        />
+    <FrameLayout
+        android:id="@+id/frameholder2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frameholder1"
         />
 </RelativeLayout>

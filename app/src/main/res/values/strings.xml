@@ -4,4 +4,8 @@
     <string name="action_settings">Settings</string>
     <string name="address">Insert Address</string>
     <string name="buttontext">ok</string>
+    <string name="fragmenthomedetailedview_title">Detailed view brought to you by Boomtown</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

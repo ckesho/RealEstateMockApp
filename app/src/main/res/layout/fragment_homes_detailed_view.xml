@@ -1,0 +1,25 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.keshogroup.boomtownapp.HomesFragmentDetailedView">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|top">
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="@string/fragmenthomedetailedview_title"
+            android:id="@+id/textview_fhdv"/>
+       <!--<WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/webview_fhdv"
+            android:layout_below="@id/textview_fhdv"></WebView>
+        -->
+    </RelativeLayout>
+
+</FrameLayout>

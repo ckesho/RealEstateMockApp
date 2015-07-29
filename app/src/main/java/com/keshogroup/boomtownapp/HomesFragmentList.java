@@ -16,7 +16,7 @@ import android.widget.ListView;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class HomesFragment extends Fragment {
+public class HomesFragmentList extends Fragment {
 
     private class Async extends AsyncTask<String, Void, Integer>{
     @Override
@@ -39,7 +39,7 @@ public class HomesFragment extends Fragment {
     int cnt;
 
     //constructor
-    public HomesFragment() {
+    public HomesFragmentList() {
     }
 
     @Override

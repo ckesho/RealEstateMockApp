@@ -6,9 +6,10 @@ Owner:Kesho Group LLC
 Contact Name: Chris Kesho
 Contact Email: keshoLLC-info@yahoo.com
  */
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,8 +28,8 @@ public class HomesController extends ActionBarActivity {
     Button mbutton1;
     FragmentManager fragmentmanager;
     FragmentTransaction fragmenttransaction;
-    HomesFragment fragment1= new HomesFragment();
-    HomesFragment fragment2= new HomesFragment();
+    HomesFragmentList fragment1= new HomesFragmentList();
+    HomesFragmentDetailedView fragment2= new HomesFragmentDetailedView();
     EditText meditaddress;
     HomesModel homesmodel= new HomesModel();
     int indexaddress;
@@ -45,6 +46,7 @@ public class HomesController extends ActionBarActivity {
         mbutton1=(Button)findViewById(R.id.button1);
         meditaddress= (EditText)findViewById(R.id.editaddress);
         meditaddress.setImeActionLabel("search",EditorInfo.IME_ACTION_SEARCH);
+
         fragmentmanager = getFragmentManager();
         fragmenttransaction = fragmentmanager.beginTransaction();
         fragmenttransaction.add(R.id.frameholder1, fragment1);
@@ -78,8 +80,8 @@ public class HomesController extends ActionBarActivity {
                 //if(fragmentmanager.findFragmentById(R.id.frameholder1)==null) { this was creating a null pointer
                     /*
                     fragmentmanager = getFragmentManager();
-                    //fragment1 = (HomesFragment)fragmentmanager.findFragmentById(R.id.frameholder1);//? this is only checking if there was a previous frag here
-                    //fragment1= new HomesFragment();
+                    //fragment1 = (HomesFragmentList)fragmentmanager.findFragmentById(R.id.frameholder1);//? this is only checking if there was a previous frag here
+                    //fragment1= new HomesFragmentList();
                     fragmenttransaction = fragmentmanager.beginTransaction();
                     fragmenttransaction.add(R.id.frameholder1, fragment1);
                     fragmenttransaction.commit();
@@ -101,11 +103,24 @@ public class HomesController extends ActionBarActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        
+
         fragment1.mlistview1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 fragment1.updatelist(position, "On click still works!!");
+
+                fragmentmanager = getFragmentManager();
+                fragmenttransaction = fragmentmanager.beginTransaction();
+                fragmenttransaction.add(R.id.frameholder2,fragment1);
+                fragmenttransaction.commit();
+
+
+                /*
+                Uri uri = Uri.parse("http://square.github.io/retrofit/static/icon-github.png");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+
+                startActivity(intent);
+                */
             }
         });
     }
