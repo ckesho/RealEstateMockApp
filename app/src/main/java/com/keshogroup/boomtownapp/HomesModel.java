@@ -28,34 +28,12 @@ public class HomesModel {
         }
     }
 
-    private class Asynctaskrest extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            //work
-            String result = params[0];
-            return result;
-        }
 
-        @Override
-        protected void onPostExecute(String postresult) {
-            super.onPostExecute(postresult);
-            //may need to use this?
-            HomesModel.this.maddress[3]="postresult";
-            maddress[5]="postresult";
-
-
-        }
-    }
 
     //method
     public int setMaddress(String mnewaddress) {
         if(mcountaddress>5){mcountaddress=0;}
         this.maddress[mcountaddress] = mnewaddress;
-        maddress[4] = "no this";
-        //update frag1
-        //An asynctask can only be used once! So you have to create a new one every time
-        Asynctaskrest callrest= new Asynctaskrest();
-        callrest.execute(mnewaddress);
         mcountaddress++;
        return mcountaddress-1;
     }
