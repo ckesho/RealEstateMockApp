@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import retrofit.*;
 
 
 public class HomesController extends ActionBarActivity {
@@ -63,7 +64,12 @@ public class HomesController extends ActionBarActivity {
                     //moved these details to fragment method
                     //fragment1.homelist[indexaddress]=homesmodel.getMaddress(indexaddress);
                     //fragment1.marrayadapter.insert(homesmodel.getMaddress(indexaddress),indexaddress);
-                    fragment1.updatelist(indexaddress, valueaddress);
+
+                    //fragment1.updatelist(indexaddress, valueaddress);
+                    int c;
+                    for(c=0;c<6; c++){
+                        fragment1.updatelist(c, homesmodel.getMaddress(c));
+                    }
 
 
                     handled = true;
@@ -90,7 +96,11 @@ public class HomesController extends ActionBarActivity {
                 //Send alternative command to save input text
                 valueaddress = meditaddress.getText().toString();
                 indexaddress = homesmodel.setMaddress(valueaddress);
-                fragment1.updatelist(indexaddress, valueaddress);
+                //fragment1.updatelist(indexaddress, valueaddress);
+                int c;
+                for(c=0;c<6; c++){
+                    fragment1.updatelist(c, homesmodel.getMaddress(c));
+                }
 
             }
         });
