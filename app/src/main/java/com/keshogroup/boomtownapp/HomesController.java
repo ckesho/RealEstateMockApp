@@ -22,9 +22,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import com.google.gson.JsonObject;
+import com.google.gson.Gson;
 import java.util.List;
-
 import retrofit.RestAdapter;
 import retrofit.http.GET;
 import retrofit.http.Path;
@@ -43,8 +43,12 @@ public class HomesController extends ActionBarActivity {
 
     public interface ZillowService {
         //@GET("/q/30328.json")
-        @GET("/q/{zip}.json")
-        Object listzipcode(@Path("zip") String zip);
+        //@GET("/q/{zip}.json")
+        //Object listzipcode(@Path("zip") String zip);
+
+        @GET("/q/30322.json")
+        JsonObject listzipcode();
+
         //@GET("/basil2style")
         //Object listzipcode();
 
@@ -66,7 +70,7 @@ public class HomesController extends ActionBarActivity {
             //String surl= web+please+feature+query+format;
             String surl= web+please+feature;
             //String surl="http://api.wunderground.com/api/852ddd19c6a16593/forecast/geolookup/conditions/q/CA/San_Francisco.json";//"http://api.wunderground.com/api/852ddd19c6a16593/features/settings/q/query.format";
-
+            //http://api.wunderground.com/api/852ddd19c6a16593/conditions/q/30328.json
             RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint(surl)
                     .build();
@@ -74,11 +78,25 @@ public class HomesController extends ActionBarActivity {
             //List<String> zipcode=service.listzipcode(result);
             //service.listzipcode().length();
 
-            Log.i("popfly", service.listzipcode(result).toString());
+            //Log.i("popfly", service.listzipcode(result).toString());
+            JsonObject object= service.listzipcode();
 
+            //JSONObject jobject= (JSONObject) object;
+            try {
+                Log.i("popfly", object.toString());
+                JsonObject object2=object.getAsJsonObject("current_observation");
+                //object2.getAsJsonPrimitive("temp_c").getAsInt();
 
-
-
+               // Log.i("popfly", "Size= "+object.size());
+                //String temperature=
+                //object.has("temperature_string");
+                Log.i("popfly", "bool"+object2.has("temp_c")+ object2.getAsJsonPrimitive("temp_c").getAsInt());
+                Log.i("popfly", "bool" + object.has("current_observation"));
+                Log.i("popfly", "bool"+object2.has("features"));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.i("popfly", "Didn't work!");
+            }
 
 
 
