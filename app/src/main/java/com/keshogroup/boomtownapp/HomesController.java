@@ -22,12 +22,15 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.google.gson.JsonObject;
-import com.google.gson.Gson;
-import java.util.List;
+
+import com.squareup.okhttp.OkHttpClient;
+
 import retrofit.RestAdapter;
+import retrofit.client.OkClient;
+import retrofit.converter.*;
 import retrofit.http.GET;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
 
 public class HomesController extends ActionBarActivity {
@@ -41,16 +44,36 @@ public class HomesController extends ActionBarActivity {
     int indexaddress;
     String valueaddress;
 
+
+
+
+
     public interface ZillowService {
-        //@GET("/q/30328.json")
+        //@GET("/q/30328.xml")
+        //Searchresults listaddress();
+
         //@GET("/q/{zip}.json")
-        //Object listzipcode(@Path("zip") String zip);
+        //JsonObject listzipcode(@Path("zip") String zip);
 
-        @GET("/q/30322.json")
-        JsonObject listzipcode();
+        //@GET("/q/30322.json")
+        //JsonObject listzipcode();
 
-        //@GET("/basil2style")
-        //Object listzipcode();
+        //@GET("/&address={address}&citystatezip={zip}")
+        //JsonObject listaddress(@Path("address") String address, @Path("zip") String zip);
+
+        @GET("/GetDeepSearchResults.htm")
+        Searchresults listaddress(@Query("zws-id") String zwsid, @Query("address") String address, @Query("citystatezip") String citystatezip);
+        //@GET("/GetDeepSearchResults.htm?zws-id=X1-ZWz1euyrodefwr_4g4th&address={address}&citystatezip={zip}")
+        //Searchresults listaddress(@Path("address") String address, @Path("zip") String zip, @Path("question") String question);
+        // '?' prevents using dynamic blocks so replace it with path and manual ?
+        //zillow doesn't allow json so adjust builder to use simplexml
+
+        //@GET("/GetDeepSearchResults.htm?zws-id=X1-ZWz1euyrodefwr_4g4th&address=970+parsons+st&citystatezip=30314")
+        //Searchresults listaddress();
+        // '?' prevents using dynamic blocks so replace it with path and manual ?
+        //zillow doesn't allow json so adjust builder to use simplexml
+
+
 
         //List<Object> listzipcode(@Path("zip") String zip);//java.util.list is similar to an array
     }
@@ -59,10 +82,13 @@ public class HomesController extends ActionBarActivity {
 
 
     private class Asynctaskrest extends AsyncTask<String, Void, String> {
+        String asynczpid;
         @Override
         protected String doInBackground(String... params) {
             //work
             String result = params[0];
+            String resultaddress, resultzip;
+
             //homesmodel.setMaddress(result);
 
             String query= "/q/30328"; String format=".json"; String web = "http://api.wunderground.com/api";
@@ -71,31 +97,64 @@ public class HomesController extends ActionBarActivity {
             String surl= web+please+feature;
             //String surl="http://api.wunderground.com/api/852ddd19c6a16593/forecast/geolookup/conditions/q/CA/San_Francisco.json";//"http://api.wunderground.com/api/852ddd19c6a16593/features/settings/q/query.format";
             //http://api.wunderground.com/api/852ddd19c6a16593/conditions/q/30328.json
+
+
+
+            /*
+            * Below is an example of calling the API for the address for the exact address match "2114 Bigelow Ave", "Seattle, WA":
+            * http://www.zillow.com/webservice/GetDeepSearchResults.htm?zws-id=<ZWSID>&address=2114+Bigelow+Ave&citystatezip=Seattle%2C+WA
+            */
+
+            resultaddress=result.substring(0, (result.length() - 6));
+            resultaddress=resultaddress.replace(' ', '+');
+            resultzip=result.substring(result.length() - 5);
+            Log.i("popfly", "/" + resultaddress + "/" + resultzip + "/");
+            String zillowurl="http://www.zillow.com/webservice";
+
             RestAdapter restAdapter = new RestAdapter.Builder()
-                    .setEndpoint(surl)
+
+                    //.setClient(new OkClient(new OkHttpClient()))
+                    .setEndpoint(zillowurl)//zillowurl
+                    .setConverter(new SimpleXMLConverter(false))
+                    //.setConverter(new retrofit.converter.SimpleXMLConverter())
                     .build();
             ZillowService service=restAdapter.create(ZillowService.class);
-            //List<String> zipcode=service.listzipcode(result);
-            //service.listzipcode().length();
 
-            //Log.i("popfly", service.listzipcode(result).toString());
-            JsonObject object= service.listzipcode();
+            //JsonObject object= service.listaddress(resultaddress, resultzip);//zillow doesnt allow json but xml
+            Searchresults data=service.listaddress("X1-ZWz1euyrodefwr_4g4th",resultaddress, resultzip);
+            //Searchresults data=service.listaddress();
+            asynczpid=data.response.results.result.zpid;
 
-            //JSONObject jobject= (JSONObject) object;
+
+            //Searchresults task=service.listaddress();
+
+
+
+
+
+
             try {
-                Log.i("popfly", object.toString());
-                JsonObject object2=object.getAsJsonObject("current_observation");
+                //service.listaddress();
+
+                Log.i("popfly", "zpid="+data.response.results.result.zpid);
+                Log.i("popfly", "message="+data.message.toString());
+                Log.i("popfly", "request="+data.request.toString());
+
+                //Log.i("popfly", "zpid="+data.results.toString());
+                //Log.i("popfly", "zpid="+data.searchresults);
+                //JsonObject object2=object.getAsJsonObject("current_observation");
                 //object2.getAsJsonPrimitive("temp_c").getAsInt();
 
                // Log.i("popfly", "Size= "+object.size());
                 //String temperature=
                 //object.has("temperature_string");
-                Log.i("popfly", "bool"+object2.has("temp_c")+ object2.getAsJsonPrimitive("temp_c").getAsInt());
-                Log.i("popfly", "bool" + object.has("current_observation"));
-                Log.i("popfly", "bool"+object2.has("features"));
+                //Log.i("popfly", "bool"+object2.has("temp_c")+ object2.getAsJsonPrimitive("temp_c").getAsInt());
+                //Log.i("popfly", "bool" + object.has("current_observation"));
+                //Log.i("popfly", "bool"+object2.has("features"));
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.i("popfly", "Didn't work!");
+
+                Log.i("popfly", "Didn't work!"+ e.toString());
             }
 
 
@@ -107,6 +166,7 @@ public class HomesController extends ActionBarActivity {
         protected void onPostExecute(String postresult) {
             super.onPostExecute(postresult);
             indexaddress=homesmodel.setMaddress(postresult);
+            homesmodel.setMzpid(indexaddress,asynczpid);
             fragment1.updatelist(indexaddress, homesmodel.getMaddress(indexaddress));
 
         }
@@ -177,7 +237,7 @@ public class HomesController extends ActionBarActivity {
         fragment1.mlistview1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                fragment1.updatelist(position, "On click still works!!");
+                fragment1.updatelist(position, "zpid"+ homesmodel.getMzpid(position));
 
                 //moved into seperate sub B activity
                 /*

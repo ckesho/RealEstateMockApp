@@ -13,6 +13,7 @@ public class HomesModel {
     int mcountaddress;
     int mcountzip;
     int cnt;
+    String[] mzpid= {"0","0","0","0","0","0"};
 
 
 //constructor
@@ -44,6 +45,10 @@ public class HomesModel {
         if(mcountzip>5){mcountzip=0;}
     }
 
+    public void setMzpid(int index, String mnewzpid) {
+        this.mzpid[index] = mnewzpid;
+    }
+
     public void setMfulladdress(String mnewfulladdress, String mnewzip) {
         //this.mfulladdress = mfulladdress;
         this.mfulladdress[mcountfulladdress][0] = mnewfulladdress;
@@ -57,7 +62,10 @@ public class HomesModel {
     }
 
     public String getMaddress(int maddressrequest) {
-
         return this.maddress[maddressrequest];
+    }
+
+    public String getMzpid(int mzpidrequest) {
+        return this.mzpid[mzpidrequest];
     }
 }
