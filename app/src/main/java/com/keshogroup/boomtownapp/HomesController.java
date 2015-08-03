@@ -81,6 +81,21 @@ public class HomesController extends ActionBarActivity {
 
 
 
+    public interface ZillowService2 {
+
+
+        @GET("/GetUpdatedPropertyDetails.htm")
+        Pictureresults listpicture(@Query("zws-id") String zwsid, @Query("zpid") String zpid);
+
+
+    }//end zillowservice2
+
+
+
+
+
+
+
     private class Asynctaskrest extends AsyncTask<String, Void, String> {
         String asynczpid;
         @Override
@@ -120,10 +135,7 @@ public class HomesController extends ActionBarActivity {
                     .build();
             ZillowService service=restAdapter.create(ZillowService.class);
 
-            //JsonObject object= service.listaddress(resultaddress, resultzip);//zillow doesnt allow json but xml
-            Searchresults data=service.listaddress("X1-ZWz1euyrodefwr_4g4th",resultaddress, resultzip);
-            //Searchresults data=service.listaddress();
-            asynczpid=data.response.results.result.zpid;
+
 
 
             //Searchresults task=service.listaddress();
@@ -134,7 +146,12 @@ public class HomesController extends ActionBarActivity {
 
 
             try {
+                //Move inside try incase a zid doesnt return!
                 //service.listaddress();
+                //JsonObject object= service.listaddress(resultaddress, resultzip);//zillow doesnt allow json but xml
+                Searchresults data=service.listaddress("X1-ZWz1euyrodefwr_4g4th",resultaddress, resultzip);
+                //Searchresults data=service.listaddress();
+                asynczpid=data.response.results.result.zpid;
 
                 Log.i("popfly", "zpid="+data.response.results.result.zpid);
                 Log.i("popfly", "message="+data.message.toString());
@@ -171,6 +188,64 @@ public class HomesController extends ActionBarActivity {
 
         }
     }//end of Asynctaskrest
+
+
+
+
+
+
+    private class Asynctaskrest2 extends AsyncTask<Integer, Void, String> {
+
+        @Override
+        protected String doInBackground(Integer... params) {
+            //work
+
+            String resultzpid = homesmodel.getMzpid(params[0]);
+            String zillowurl2="http://www.zillow.com/webservice";
+            String mresultpicture="http://www.zillowstatic.com/cms/AF-BottomMerchUpsell-1_HP-BottomRight-2X_updated.jpg";
+
+            /*
+            http://www.zillow.com/webservice/GetUpdatedPropertyDetails.htm?zws-id=<ZWSID>&zpid=48749425
+            */
+
+            RestAdapter restAdapter = new RestAdapter.Builder()
+                    .setEndpoint(zillowurl2)//zillowurl
+                    .setConverter(new SimpleXMLConverter(false))
+                    .build();
+            ZillowService2 picservice=restAdapter.create(ZillowService2.class);
+            Pictureresults mpicture=picservice.listpicture("X1-ZWz1euyrodefwr_4g4th",resultzpid);
+
+            try {
+                mresultpicture=mpicture.response.images.image.get(0);
+                Log.i("popfly", "picture="+mpicture.response.images.image.get(0).toString());
+                Log.i("popfly", "picture="+mpicture.response.images.toString());
+                Log.i("popfly", "picture="+mpicture.response.images.image.size());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.i("popfly", "Didn't work!"+ e.toString());
+            }
+
+            return mresultpicture;
+        }
+
+        @Override
+        protected void onPostExecute(String postresult) {
+            super.onPostExecute(postresult);
+            //call activity 2 with picture info
+            Intent intent = new Intent();
+            intent.putExtra("open",postresult);
+            intent.setClass(getBaseContext(),HomesControllerSubB.class);
+            startActivity(intent);
+
+        }
+    }//end of Asynctaskrest2
+
+
+
+
+
+
 
 
 
@@ -238,7 +313,8 @@ public class HomesController extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 fragment1.updatelist(position, "zpid"+ homesmodel.getMzpid(position));
-
+                Asynctaskrest2 asynctaskrest2= new Asynctaskrest2();
+                asynctaskrest2.execute(position);
                 //moved into seperate sub B activity
                 /*
                 fragmenttransaction = fragmentmanager.beginTransaction();
@@ -251,10 +327,7 @@ public class HomesController extends ActionBarActivity {
 
 
                 //Uri uri = Uri.parse("http://square.github.io/retrofit/static/icon-github.png");
-                Intent intent = new Intent();
-                intent.putExtra("open","http://thekeshogroup.files.wordpress.com/2015/07/keshogroup-logo1w_kg.jpg");
-                intent.setClass(getBaseContext(),HomesControllerSubB.class);
-                startActivity(intent);
+
 
             }
         });
