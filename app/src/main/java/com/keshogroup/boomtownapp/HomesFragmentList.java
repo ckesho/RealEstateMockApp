@@ -74,7 +74,7 @@ public class HomesFragmentList extends Fragment {
         marrayadapter= new ArrayAdapter<String>(getActivity().getBaseContext(),R.layout.textviewtemplate,homelist);
         Log.i("boomtown", "init madapter success");
         mlistview1.setAdapter(marrayadapter);
-        mlistview1.setBackgroundColor(Color.CYAN);
+        mlistview1.setBackgroundColor(Color.rgb(195,234,249));
         Log.i("boomtown", "set madapter success");
         //mlistview1.OnItemClickListener;
 

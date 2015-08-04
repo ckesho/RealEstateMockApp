@@ -9,17 +9,35 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="left|top">
+        android:layout_gravity="left|top"
+        >
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bubble"
+            android:background="@android:color/white">
 
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="@string/fragmenthomedetailedview_title"
-            android:id="@+id/textview_fhdv"/>
-       <WebView
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="75dp"
+                android:id="@+id/headshot"
+                android:background="@drawable/headshot50x75"
+                android:layout_margin="5dp" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/fragmenthomedetailedview_title"
+                android:id="@+id/textview_fhdv"
+                android:layout_toRightOf="@+id/headshot"
+                android:gravity="center_vertical"
+                android:textColor="@android:color/black"/>
+        </RelativeLayout>
+        <WebView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/webview_fhdv"
-            android:layout_below="@id/textview_fhdv"></WebView>
+            android:layout_below="@id/bubble"
+            android:layout_marginTop="5dp"></WebView>
 
     </RelativeLayout>
+
 
 </FrameLayout>
